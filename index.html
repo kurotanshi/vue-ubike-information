@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width">
   <title>YouBike 臺北市公共自行車即時資訊</title>
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
 
   <style>
-    body{ padding: 1em;  }
+    body{ padding: 1em; }
+    .pointer { cursor: pointer; }
   </style>
 
 </head>
@@ -18,19 +20,56 @@
 
   <div id="app">
 
+    <!-- 搜尋框 -->
+    <p>站點名稱搜尋: <input type="text" v-model="searchText" /></p>
+
+    <!-- 表格 -->
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>#</th>
-          <th>場站名稱</th>
-          <th>場站區域</th>
-          <th>目前可用車輛</th>
-          <th>總停車格</th>
-          <th>資料更新時間</th>
+          <th @click="setSort('sno')">
+            #
+            <span v-show="currentSort === 'sno'">
+              <i
+                class="fa"
+                :class="isSortDesc ? 'fa-sort-desc' : 'fa-sort-asc'"
+                aria-hidden="true"
+              ></i>
+            </span>
+          </th>
+          <th>
+            場站名稱
+          </th>
+          <th>
+            場站區域
+          </th>
+          <th @click="setSort('sbi')" class="pointer">
+            目前可用車輛
+            <span v-show="currentSort === 'sbi'">
+              <i
+                class="fa"
+                :class="isSortDesc ? 'fa-sort-desc' : 'fa-sort-asc'"
+                aria-hidden="true"
+              ></i>
+            </span>
+          </th>
+          <th @click="setSort('tot')" class="pointer">
+            總停車格
+            <span v-show="currentSort === 'tot'">
+              <i
+                class="fa"
+                :class="isSortDesc ? 'fa-sort-desc' : 'fa-sort-asc'"
+                aria-hidden="true"
+              ></i>
+            </span>
+          </th>
+          <th>
+            資料更新時間
+          </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="s in ubikeStops">
+        <tr v-for="s in slicedUbikeStops" :key="s.sno">
           <td>{{ s.sno }}</td>
           <td>{{ s.sna }}</td>
           <td>{{ s.sarea }}</td>
@@ -39,13 +78,35 @@
           <td>{{ timeFormat(s.mday) }}</td>
         </tr>
       </tbody>
-
     </table>
+  
+    <!-- 頁籤 -->
+    <nav v-if="pagerEnd > 0">
+      <ul class="pagination">
+        <li @click.prevent="setPage(currentPage - 1)" class="page-item">
+          <a class="page-link" href>Previous</a>
+        </li>
+
+        <li
+          v-for="i in pagerEnd"
+          :class="{ active: i + pagerAddAmount === currentPage }"
+          :key="i"
+          @click.prevent="setPage(i + pagerAddAmount)"
+          class="page-item"
+        >
+          <a class="page-link" href>{{ i + pagerAddAmount }}</a>
+        </li>
+
+        <li @click.prevent="setPage(currentPage + 1)" class="page-item">
+          <a class="page-link" href>Next</a>
+        </li>
+      </ul>
+    </nav>
 
   </div>
 
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="./scripts.js?v=2020081401"></script>
+  <script src="./scripts.js?v=2020081402"></script>
 
 </body>
 </html>
