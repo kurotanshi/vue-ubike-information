@@ -36,7 +36,7 @@
           <td>{{ s.sarea }}</td>
           <td>{{ s.sbi }}</td>
           <td>{{ s.tot }}</td>
-          <td>{{ s.mday | timeFormat }}</td>
+          <td>{{ timeFormat(s.mday) }}</td>
         </tr>
       </tbody>
 
@@ -44,8 +44,7 @@
 
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.js"></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/vue@next"></script>
   <script src="scripts.js"></script>
 
 </body>

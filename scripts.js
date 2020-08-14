@@ -1,9 +1,10 @@
-var vm = new Vue({
-    el: '#app',
-    data: {
+const vm = Vue.createApp({
+    data () {
+      return {
         ubikeStops: []
+      }
     },
-    filters: {
+    methods: {
       timeFormat(t){
 
         var date = [], time = [];
@@ -28,13 +29,12 @@ var vm = new Vue({
         // lat：緯度、 lng：經度、 ar：地(中文)、 sareaen：場站區域(英文)、
         // snaen：場站名稱(英文)、 aren：地址(英文)、 bemp：空位數量、 act：全站禁用狀態
 
-        axios.get('https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.gz')
-            .then(res => {
-
-                // 將 json 轉陣列後存入 this.ubikeStops
-                this.ubikeStops = Object.keys(res.data.retVal).map(key => res.data.retVal[key]);
-
-            });
+        fetch('https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.gz')
+          .then(res => res.json())
+          .then(res => {
+              // 將 json 轉陣列後存入 this.ubikeStops
+              this.ubikeStops = Object.keys(res.retVal).map(key => res.retVal[key]);
+          });
 
     }
-});
+}).mount('#app');
