@@ -1,4 +1,8 @@
 <template>
+
+  <!-- 搜尋框 -->
+  <p>站點名稱搜尋: <input type="text" v-model="searchText" /></p>
+
   <table class="table table-striped">
     <thead>
       <tr>
