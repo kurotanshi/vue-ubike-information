@@ -9,7 +9,7 @@ export default {
   name: 'Map',
   computed: {
     ubikeStops () {
-      return this.$store.getters.slicedUbikeStops;
+      return this.$store.getters.filtedUbikeStops;
     },
     districtList () {
       return this.$store.state.districtList;
