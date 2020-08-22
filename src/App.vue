@@ -17,6 +17,9 @@
     </div>
   </nav>
 
+  <!-- 搜尋控制項 -->
+  <searchBar />
+
   <!-- 主視覺 -->
   <div class="content">
     <router-view/>
@@ -24,6 +27,16 @@
 
   </div>
 </template>
+
+<script>
+import searchBar from './components/SearchBar.vue';
+export default {
+  name: 'App',
+  components: {
+    searchBar
+  }
+}
+</script>
 
 <style lang="scss" src="./style.scss"></style>
 
