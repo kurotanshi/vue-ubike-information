@@ -7,6 +7,7 @@ export default createStore({
     ubikeStops: [],         // 存放所有 ubike 站點
     isSortDesc: false,      // 判斷目前升降冪
     currentSort: 'sno',     // 目前排序選項、預設為編號
+    isNonZero: false,       // 是否僅顯示可用站點
     searchText: '',         // 搜尋文字
     currentPage: 1,         // 目前頁數
     countOfPage: 10         // 單頁筆數    
@@ -32,6 +33,9 @@ export default createStore({
     setSearchText (state, payload) {
       state.searchText = payload;
     },
+    setIsNonZero (state, payload) {
+      state.isNonZero = payload;
+    },
     setCurrentPage (state, payload) {
       state.currentPage = payload;
     },
@@ -39,11 +43,15 @@ export default createStore({
   getters: {
     filtedUbikeStops (state) {
       // 過濾搜尋 (行政區、搜尋文字)
-      const { ubikeStops, searchText, currDistrict } = state;    
-      // 過濾行政區、搜尋文字
-      const result = ubikeStops.filter(d => d.sarea.includes(currDistrict) && d.sna.includes(searchText));
+      const { ubikeStops, isNonZero, searchText, currDistrict } = state;
       
-      return result;
+      // 先刷一輪行政區、搜尋文字
+      const result = ubikeStops.filter(d => d.sarea.includes(currDistrict) && d.sna.includes(searchText));
+    
+      // 判斷是否限定可用站點
+      return (isNonZero) 
+        ? result.filter( d => d.sbi > 0 )
+        : result;
     },
     sortedUbikeStops (state, getters) {
       // 拿過濾的結果做排序

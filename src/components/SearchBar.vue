@@ -9,11 +9,11 @@
     </label>
 
     <label>
-      關鍵字搜尋: <input type="text">
+      關鍵字搜尋: <input type="text" v-model="searchText">
     </label>
 
     <label>
-      <input type="checkbox"> 僅顯示可用車輛站點
+      <input type="checkbox" v-model="isNonZero"> 僅顯示可用車輛站點
     </label>
   </div>
 </template>
@@ -33,6 +33,24 @@ export default {
         // 更換行政區回到第一頁
         this.$store.commit('setCurrentPage', 1);
         this.$store.commit('setCurrDistrict', value);
+      }
+    },
+    isNonZero: {
+      get () {
+        return this.$store.state.isNonZero;
+      },
+      set (value) {
+        this.$store.commit('setCurrentPage', 1);
+        this.$store.commit('setIsNonZero', value);
+      }
+    },
+    searchText: {
+      get () {
+        return this.$store.state.searchText;
+      },
+      set (value) {
+        this.$store.commit('setCurrentPage', 1);
+        this.$store.commit('setSearchText', value);
       }
     }
   },
