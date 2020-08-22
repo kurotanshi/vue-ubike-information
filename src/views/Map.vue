@@ -24,6 +24,12 @@ export default {
     }
   },
   watch: {
+    currDistrict(value) {
+      if( value !== '' ) {
+        const currDist = this.districtList.find( d => d.name === value);
+        this.map.flyTo(new L.LatLng(currDist.latitude, currDist.longitude), 15);
+      }
+    },
     ubikeStops (stops) {
       this.markerRepaint(stops);
     }
@@ -31,6 +37,26 @@ export default {
   methods: {
     addMarker(stop) {
       const map = this.map;
+
+      let iconColor;
+      if (stop.sbi > 20) {
+        iconColor = 'green';
+      } else if (stop.sbi > 10) {
+        iconColor = 'yellow';
+      } else if (stop.sbi > 0) {
+        iconColor = 'red';
+      } else {
+        iconColor = 'grey';
+      }
+
+      const ICON = L.icon({
+        iconUrl: `https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${iconColor}.png`,
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41],
+      });
 
       const popupHTML = `<div class="popup-box">
           <h3>${stop.sna}</h3>
@@ -40,7 +66,7 @@ export default {
           <p>更新時間 : ${stop.mday}</p>
         </div>`;
 
-      L.marker([stop.lat, stop.lng])
+      L.marker([stop.lat, stop.lng], {icon: ICON})
         .addTo(map)
         .bindPopup(popupHTML);
     },
