@@ -30,6 +30,8 @@ export default {
         return this.$store.state.currDistrict;
       },
       set (value) {
+        // 更換行政區回到第一頁
+        this.$store.commit('setCurrentPage', 1);
         this.$store.commit('setCurrDistrict', value);
       }
     }
