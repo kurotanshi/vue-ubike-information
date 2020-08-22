@@ -96,6 +96,7 @@ export default {
     }
   },
   created() {
+    this.$store.commit('setIsMapMode', false);
     this.$store.dispatch('fetchUbikeStops');
   },
 }

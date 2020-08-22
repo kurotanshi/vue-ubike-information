@@ -22,6 +22,9 @@ export default {
       }).addTo(this.map);
     }
   },
+  created() {
+    this.$store.commit('setIsMapMode', true);
+  },
   mounted () {
     this.mapInit();
   },

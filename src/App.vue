@@ -7,11 +7,11 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">      
-        <li class="nav-item active">
-          <a class="nav-link" href>列表版</a>
+        <li class="nav-item" :class="{ 'active': !isMapMode }">
+          <router-link class="nav-link" to="./">列表版</router-link>
         </li>
-        <li class="nav-item" >
-          <a class="nav-link" href>地圖版</a>
+        <li class="nav-item" :class="{ 'active': isMapMode }">
+          <router-link class="nav-link" to="./map">地圖版</router-link>
         </li>
       </ul>
     </div>
@@ -34,6 +34,11 @@ export default {
   name: 'App',
   components: {
     searchBar
+  },
+  computed: {
+    isMapMode () {
+      return this.$store.state.isMapMode;
+    }
   },
 }
 </script>

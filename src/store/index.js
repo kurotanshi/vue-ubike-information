@@ -7,6 +7,7 @@ export default createStore({
     ubikeStops: [],         // 存放所有 ubike 站點
     isSortDesc: false,      // 判斷目前升降冪
     currentSort: 'sno',     // 目前排序選項、預設為編號
+    isMapMode: false,       // 判斷目前是否為地圖模式
     isNonZero: false,       // 是否僅顯示可用站點
     searchText: '',         // 搜尋文字
     currentPage: 1,         // 目前頁數
@@ -21,6 +22,9 @@ export default createStore({
     },
     setUbikeStops (state, payload) {
       state.ubikeStops = payload;
+    },
+    setIsMapMode (state, payload) {
+      state.isMapMode = payload;
     },
     setIsSortDesc (state, payload) {
       state.isSortDesc = payload;
