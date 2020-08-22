@@ -78,6 +78,7 @@ export default {
   },
   mounted () {
     this.mapInit();
+    this.markerRepaint();
   },
 }
 </script>
