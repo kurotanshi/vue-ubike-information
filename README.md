@@ -1,4 +1,24 @@
-# vue-ubike-information
-YouBike 臺北市公共自行車即時資訊
+# ubike-map
 
-Vue 課程作業範例: http://kuro.tw/vue-ubike-information/
+## Project setup
+```
+yarn install
+```
+
+### Compiles and hot-reloads for development
+```
+yarn serve
+```
+
+### Compiles and minifies for production
+```
+yarn build
+```
+
+### Lints and fixes files
+```
+yarn lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
