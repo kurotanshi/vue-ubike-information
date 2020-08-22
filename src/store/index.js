@@ -38,10 +38,12 @@ export default createStore({
   },
   getters: {
     filtedUbikeStops (state) {
-      // 過濾搜尋
-      return state.ubikeStops.length === 0
-        ? []
-        : state.ubikeStops.filter(d => d.sna.includes(state.searchText));
+      // 過濾搜尋 (行政區、搜尋文字)
+      const { ubikeStops, searchText, currDistrict } = state;    
+      // 過濾行政區、搜尋文字
+      const result = ubikeStops.filter(d => d.sarea.includes(currDistrict) && d.sna.includes(searchText));
+      
+      return result;
     },
     sortedUbikeStops (state, getters) {
       // 拿過濾的結果做排序
