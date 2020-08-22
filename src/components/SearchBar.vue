@@ -2,8 +2,9 @@
   <div class="seaarch-wraps">
     <label>
       行政區篩選:
-      <select>
+      <select v-model="currDistrict">
         <option value="">不限區域</option>
+        <option v-for="d in districtList" :value="d.name" :key="d.name">{{ d.name }}</option>
       </select>
     </label>
 
@@ -19,6 +20,22 @@
 
 <script>
 export default {
-  name: 'SearchBar'
+  name: 'SearchBar',
+  computed: {
+    districtList() {
+      return this.$store.state.districtList;
+    },
+    currDistrict: {
+      get () {
+        return this.$store.state.currDistrict;
+      },
+      set (value) {
+        this.$store.commit('setCurrDistrict', value);
+      }
+    }
+  },
+  created() {
+    this.$store.dispatch('fetchLocations');
+  },
 }
 </script>

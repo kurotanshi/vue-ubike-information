@@ -2,14 +2,24 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
+    currDistrict: '',       // 目前所選行政區
+    districtList: [],       // 行政區列表
     ubikeStops: [],         // 存放所有 ubike 站點
     isSortDesc: false,      // 判斷目前升降冪
     currentSort: 'sno',     // 目前排序選項、預設為編號
     searchText: '',         // 搜尋文字
     currentPage: 1,         // 目前頁數
-    countOfPage: 10         // 單頁筆數
+    countOfPage: 10         // 單頁筆數    
   },
   mutations: {
+    // 對應 state.currDistrict
+    setCurrDistrict (state, payload) {
+      state.currDistrict = payload;
+    },
+    // 對應 state.districtList
+    setDistrictList (state, payload) {
+      state.districtList = payload;
+    },
     setUbikeStops (state, payload) {
       state.ubikeStops = payload;
     },
@@ -52,6 +62,15 @@ export default createStore({
     },
   },
   actions: {
+    async fetchLocations({ commit }) {
+      // 取得行政區資料
+        const json = await fetch('https://raw.githubusercontent.com/kurotanshi/mask-map/master/raw/area-location.json')
+          .then((res) => res.json());
+      
+        // 只需要台北市的資料
+        commit('setDistrictList', json.find( d => d.name === '臺北市' )['districts']);
+        
+    },
     async fetchUbikeStops({ commit }) {
       // 欄位說明請參照:
       // http://data.taipei/opendata/datalist/datasetMeta?oid=8ef1626a-892a-4218-8344-f7ac46e1aa48
