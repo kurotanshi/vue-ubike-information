@@ -22,7 +22,58 @@
 <script>
 export default {
   name: 'Pagination',
+  data () {
+    return {
+      paginationMax: 10
+    }
+  },
+  computed: {
+    countOfPage () {
+      // 單頁筆數
+      return this.$store.state.countOfPage;
+    },
+    listLength () {
+      // 總長度
+      return this.$store.getters.filtedUbikeStops.length;
+    },
+    currentPage: {
+      get () {
+        return this.$store.state.currentPage;
+      },
+      set (value) {
+        this.$store.commit('setCurrentPage', value);
+      }
+    },   
+    totalPageCount() {
+      // 計算總頁數
+      return Math.ceil(this.listLength / this.countOfPage);
+    },
+    pagerEnd() {
+      // 頁碼尾端
+      return this.totalPageCount <= this.paginationMax
+        ? this.totalPageCount
+        : this.paginationMax;
+    },
+    pagerAddAmount() {
+      // 頁碼位移
+      const tmp =
+        this.totalPageCount <= this.paginationMax
+          ? 0
+          : this.currentPage + 4 - this.pagerEnd;
 
+      return tmp <= 0
+        ? 0
+        : this.totalPageCount - (this.paginationMax + tmp) < 0
+          ? this.totalPageCount - this.paginationMax
+          : tmp;
+    }
+  },
+  methods: {
+    setPage (page) {
+      if( page < 1 || page > this.totalPageCount ) return;
+      this.currentPage = page;
+    }
+  }
 }
 </script>
 

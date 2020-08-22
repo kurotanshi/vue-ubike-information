@@ -46,11 +46,18 @@
     </tbody>
   </table>
 
+  <Pagination />
+
 </template>
 
 <script>
+import Pagination from '../components/Pagination.vue';
+
 export default {
   name: 'List',  
+  components: {
+    Pagination
+  },
   computed: {
     slicedUbikeStops () {
       return this.$store.getters.slicedUbikeStops;
