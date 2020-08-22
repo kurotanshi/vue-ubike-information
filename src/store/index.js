@@ -13,11 +13,9 @@ export default createStore({
     countOfPage: 10         // 單頁筆數    
   },
   mutations: {
-    // 對應 state.currDistrict
     setCurrDistrict (state, payload) {
       state.currDistrict = payload;
     },
-    // 對應 state.districtList
     setDistrictList (state, payload) {
       state.districtList = payload;
     },
@@ -104,7 +102,7 @@ export default createStore({
             commit('setUbikeStops', ubikeStops);
         });
   
-      }
+    }
   },
   modules: {
   }
