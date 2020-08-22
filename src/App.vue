@@ -40,6 +40,9 @@ export default {
       return this.$store.state.isMapMode;
     }
   },
+  created () {
+    this.$store.dispatch('fetchUbikeStops');
+  }
 }
 </script>
 
