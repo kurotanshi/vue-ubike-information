@@ -7,6 +7,25 @@ import L from 'leaflet';
 
 export default {
   name: 'Map',
+  computed: {
+    ubikeStops () {
+      return this.$store.getters.slicedUbikeStops;
+    },
+    districtList () {
+      return this.$store.state.districtList;
+    },
+    currDistrict () {
+      return this.$store.state.currDistrict;
+    }
+  },
+  data () {
+    return {
+      map: null
+    }
+  },
+  watch: {
+
+  },
   methods: {
     mapInit () {
       // 預設以台北車站經緯度為中心
