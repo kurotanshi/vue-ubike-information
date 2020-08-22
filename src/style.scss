@@ -1,0 +1,65 @@
+#app {
+  display: block;
+  max-width: 1300px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+#ubike-map {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 800px;
+}
+
+.popup-box {
+  h3 { 
+    font-size: 1.3rem; 
+  }
+  p {
+    font-size: 0.9rem;
+  }
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.highlight {
+  color: #f00;
+}
+
+.navbar-brand h1 {
+  font-size: 1.5rem;
+}
+
+.seaarch-wraps {
+  position: relative;
+  display: block;
+  padding: 20px 10px 10px 30px;
+  font-size: 1.3rem;
+  overflow: hidden;
+
+  label {
+    float: left;
+    margin-right: 2rem;
+    display: block;
+    height: 2rem;
+  }
+  
+  input[type="text"] {
+    padding: 2px 5px;
+    width: 270px;
+    height: 2rem;
+  }
+
+  select {
+    height: 2rem;
+    width: 120px;    
+  }
+}
+
+.content {
+  display: block;
+  margin: 1rem auto;
+}
