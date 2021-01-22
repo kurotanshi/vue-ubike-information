@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { computed, inject } from "vue";
 import Pagination from '../components/Pagination.vue';
 
 export default {
@@ -55,48 +56,57 @@ export default {
   components: {
     Pagination
   },
-  computed: {
-    slicedUbikeStops () {
-      return this.$store.getters.slicedUbikeStops;
-    },
-    isSortDesc: {
+  setup() {
+    const store = inject('store');
+    const { setIsMapMode, state } = store;
+    const slicedUbikeStops = computed(() => state.slicedUbikeStops)
+    setIsMapMode(false);
+
+    const isSortDesc = computed({
       get () {
-        return this.$store.state.isSortDesc;
+        return store.state.isSortDesc;
       },
       set (value) {
-        this.$store.commit('setIsSortDesc', value);
+        store.setIsSortDesc(value);
       }
-    },
-    currentSort: {
+    });
+
+    const currentSort = computed({
       get () {
-        return this.$store.state.currentSort;
+        return store.state.currentSort;
       },
       set (value) {
-        this.$store.commit('setCurrentSort', value);
+        store.setCurrentSort(value);
       }
-    },
-    searchText: {
+    });
+
+    const searchText = computed({
       get () {
-        return this.$store.state.searchText;
+        return store.state.searchText;
       },
       set (value) {
-        this.$store.commit('setSearchText', value);
+        store.setSearchText(value);
       }
-    }
-  },
-  methods: {
-    setSort(sortType) {
+    });
+
+    const setSort = sortType => {
       // 切換排序
-      if (sortType === this.currentSort) {
-        this.isSortDesc = !this.isSortDesc;
+      if (sortType === currentSort.value) {
+        isSortDesc.value = !isSortDesc.value;
       } else {
-        this.currentSort = sortType;
-        this.isSortDesc = false;
+        currentSort.value = sortType;
+        isSortDesc.value = false;
       }
     }
-  },
-  created() {
-    this.$store.commit('setIsMapMode', false);    
-  },
+
+    return {
+      slicedUbikeStops,
+      isSortDesc,
+      currentSort,
+      searchText,
+      setSort
+    }
+
+  }
 }
 </script>

@@ -29,19 +29,27 @@
 </template>
 
 <script>
+import { computed, provide } from 'vue';
+import { ubikeStore } from './composition/store';
 import searchBar from './components/SearchBar.vue';
+
 export default {
   name: 'App',
   components: {
     searchBar
   },
-  computed: {
-    isMapMode () {
-      return this.$store.state.isMapMode;
+  setup() {
+    const store = ubikeStore();
+    const { state, fetchUbikeStops } = store;
+    const isMapMode = computed(() => state.isMapMode)
+
+    provide('store', store);
+    fetchUbikeStops();
+
+    return {
+      state,
+      isMapMode
     }
-  },
-  created () {
-    this.$store.dispatch('fetchUbikeStops');
   }
 }
 </script>

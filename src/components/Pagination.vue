@@ -20,58 +20,64 @@
 </template>
 
 <script>
+import { computed, inject } from "vue";
+
 export default {
   name: 'Pagination',
-  data () {
-    return {
-      paginationMax: 10
-    }
-  },
-  computed: {
-    countOfPage () {
-      // 單頁筆數
-      return this.$store.state.countOfPage;
-    },
-    listLength () {
-      // 總長度
-      return this.$store.getters.filtedUbikeStops.length;
-    },
-    currentPage: {
+  setup() {
+    const store = inject('store');
+    const paginationMax = 10;   
+    const { state, setCurrentPage } = store;
+    const listLength = computed(() => state.filtedUbikeStops.length);
+    const countOfPage = computed(() => state.countOfPage);
+
+    const currentPage = computed({
       get () {
-        return this.$store.state.currentPage;
+        return state.currentPage;
       },
       set (value) {
-        this.$store.commit('setCurrentPage', value);
+        setCurrentPage(value);
       }
-    },   
-    totalPageCount() {
-      // 計算總頁數
-      return Math.ceil(this.listLength / this.countOfPage);
-    },
-    pagerEnd() {
+    });
+
+    const totalPageCount = computed(() => {
+      return Math.ceil(listLength.value / countOfPage.value );
+    });
+
+    const pagerEnd = computed(() => {
       // 頁碼尾端
-      return this.totalPageCount <= this.paginationMax
-        ? this.totalPageCount
-        : this.paginationMax;
-    },
-    pagerAddAmount() {
+      return totalPageCount.value <= paginationMax
+        ? totalPageCount.value
+        : paginationMax;
+    });
+
+    const pagerAddAmount = computed(() =>{
       // 頁碼位移
       const tmp =
-        this.totalPageCount <= this.paginationMax
+        totalPageCount.value <= paginationMax
           ? 0
-          : this.currentPage + 4 - this.pagerEnd;
+          : currentPage.value + 4 - pagerEnd.value;
 
       return tmp <= 0
         ? 0
-        : this.totalPageCount - (this.paginationMax + tmp) < 0
-          ? this.totalPageCount - this.paginationMax
+        : totalPageCount.value - (paginationMax + tmp) < 0
+          ? totalPageCount.value - paginationMax
           : tmp;
-    }
-  },
-  methods: {
-    setPage (page) {
-      if( page < 1 || page > this.totalPageCount ) return;
-      this.currentPage = page;
+    })
+
+    const setPage = page => {
+      if( page < 1 || page > totalPageCount.value ) return;
+      currentPage.value = page;
+    };
+
+    return {
+      countOfPage,
+      listLength,
+      currentPage,
+      totalPageCount,
+      pagerEnd,
+      pagerAddAmount,
+      setPage
     }
   }
 }

@@ -13,49 +13,62 @@
     </label>
 
     <label>
-      <input type="checkbox" v-model="isNonZero"> 僅顯示可用車輛站點
+      <input type="checkbox" v-model="isNonZero"> 
+      僅顯示可用車輛站點
     </label>
   </div>
 </template>
 
 <script>
+import { computed, inject } from "vue";
+
 export default {
   name: 'SearchBar',
-  computed: {
-    districtList() {
-      return this.$store.state.districtList;
-    },
-    currDistrict: {
+  setup () {
+    const store = inject('store');
+    const { fetchLocations, state, setCurrentPage, setCurrDistrict, setIsNonZero, setSearchText } = store;
+    fetchLocations();
+
+    const districtList = computed(() => state.districtList);
+
+    const currDistrict = computed({
       get () {
-        return this.$store.state.currDistrict;
+        return store.state.currDistrict;
       },
       set (value) {
         // 更換行政區回到第一頁
-        this.$store.commit('setCurrentPage', 1);
-        this.$store.commit('setCurrDistrict', value);
+        setCurrentPage(1);
+        setCurrDistrict(value);
       }
-    },
-    isNonZero: {
+    });
+
+    const isNonZero = computed({
       get () {
-        return this.$store.state.isNonZero;
+        return store.state.isNonZero;
       },
       set (value) {
-        this.$store.commit('setCurrentPage', 1);
-        this.$store.commit('setIsNonZero', value);
+        setCurrentPage(1);
+        setIsNonZero(value);
       }
-    },
-    searchText: {
+    });
+
+    const searchText = computed({
       get () {
-        return this.$store.state.searchText;
+        return store.state.searchText;
       },
       set (value) {
-        this.$store.commit('setCurrentPage', 1);
-        this.$store.commit('setSearchText', value);
+        setCurrentPage(1);
+        setSearchText(value);
       }
+    });
+
+
+    return {
+      districtList,
+      currDistrict,
+      isNonZero,
+      searchText
     }
-  },
-  created() {
-    this.$store.dispatch('fetchLocations');
-  },
+  }
 }
 </script>

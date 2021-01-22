@@ -4,40 +4,22 @@
 
 <script>
 import L from 'leaflet';
+import { computed, inject, watch, onMounted } from "vue";
 
 export default {
   name: 'Map',
-  computed: {
-    ubikeStops () {
-      return this.$store.getters.filtedUbikeStops;
-    },
-    districtList () {
-      return this.$store.state.districtList;
-    },
-    currDistrict () {
-      return this.$store.state.currDistrict;
-    }
-  },
-  data () {
-    return {
-      map: null
-    }
-  },
-  watch: {
-    currDistrict(value) {
-      if( value !== '' ) {
-        const currDist = this.districtList.find( d => d.name === value);
-        this.map.flyTo(new L.LatLng(currDist.latitude, currDist.longitude), 15);
-      }
-    },
-    ubikeStops (stops) {
-      this.markerRepaint(stops);
-    }
-  },
-  methods: {
-    addMarker(stop) {
-      const map = this.map;
+  setup() {
+    const store = inject('store');
+    let map = null;    
+    const { state, setIsMapMode } = store;
 
+    const ubikeStops = computed(() => state.filtedUbikeStops);
+    const districtList = computed(() => state.districtList);
+    const currDistrict = computed(() => state.currDistrict);
+
+    setIsMapMode(true);
+
+    const addMarker = stop => {
       let iconColor;
       if (stop.sbi > 20) {
         iconColor = 'green';
@@ -69,42 +51,54 @@ export default {
       L.marker([stop.lat, stop.lng], {icon: ICON})
         .addTo(map)
         .bindPopup(popupHTML);
-    },
-    clearMarkers() {
-      if( this.map === null ) return;
+    };
 
-      this.map.eachLayer((layer) => {
+    const clearMarkers = () => {
+      if( map === null ) return;
+
+      map.eachLayer((layer) => {
         if (layer instanceof L.Marker) {
-          this.map.removeLayer(layer);
+          map.removeLayer(layer);
         }
       });
-    },
-    markerRepaint(stops = this.ubikeStops) {
-      if( this.map !== null ) {
-        this.clearMarkers();
-        stops.forEach((element) => this.addMarker(element) );
+    };
+
+    const markerRepaint = (stops = ubikeStops.value) => {
+      if( map !== null ) {
+        clearMarkers();
+        stops.forEach((element) => addMarker(element) );
       }
-    },
-    mapInit () {
+    };
+
+    const mapInit = () => {
       // 預設以台北車站經緯度為中心
       const center = [25.046273, 121.517498]
 
       // 對應 id="ubike-map"
-      this.map = L.map('ubike-map', { center: center, zoom: 14 });
+      map = L.map('ubike-map', { center: center, zoom: 14 });
 
       // 版權宣告
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '<a target="_blank" href="https://www.openstreetmap.org/">© OpenStreetMap 貢獻者</a>',
         maxZoom: 18,
-      }).addTo(this.map);
-    }
-  },
-  created() {
-    this.$store.commit('setIsMapMode', true);
-  },
-  mounted () {
-    this.mapInit();
-    this.markerRepaint();
-  },
+      }).addTo(map);
+    };
+
+    watch(currDistrict, value => {
+      if( value !== '' ) {
+        const currDist = districtList.value.find( d => d.name === value);
+        map.flyTo(new L.LatLng(currDist.latitude, currDist.longitude), 15);
+      }
+    });
+
+    watch(ubikeStops, value => {
+      markerRepaint(value)
+    });
+
+    onMounted(() => {
+      mapInit();
+      markerRepaint();
+    });
+  }
 }
 </script>
